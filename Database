@@ -1,0 +1,44 @@
+import sqlite3
+
+CREATE_PLAYERS_TABLE = """
+CREATE TABLE IF NOT EXISTS players (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    position TEXT,
+    rating INTEGER
+);
+"""
+
+INSERT_PLAYER = "INSERT INTO players (name, position, rating) VALUES (?, ?, ?);"
+GET_ALL_PLAYERS = "SELECT * FROM players;"
+GET_PLAYERS_BY_NAME = "SELECT * FROM players WHERE name = ?;"
+
+GET_BEST_PLAYER = """
+SELECT * FROM players
+WHERE name = ?
+ORDER BY rating DESC
+LIMIT 1;
+"""
+
+def connect():
+    return sqlite3.connect("rugby.db")
+
+def create_tables(connection):
+    with connection:
+        connection.execute(CREATE_PLAYERS_TABLE)
+
+def add_player(connection, name, position, rating):
+    with connection:
+        connection.execute(INSERT_PLAYER, (name, position, rating))
+
+def get_all_players(connection):
+    with connection:
+        return connection.execute(GET_ALL_PLAYERS).fetchall()
+
+def get_players_by_name(connection, name):
+    with connection:
+        return connection.execute(GET_PLAYERS_BY_NAME, (name,)).fetchall()
+
+def get_best_player(connection, name):
+    with connection:
+        return connection.execute(GET_BEST_PLAYER, (name,)).fetchone()
