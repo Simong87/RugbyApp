@@ -1,4 +1,4 @@
-import Ruvby_database
+import Rugby_database
 
 MENU_PROMPT = """ RUGBY PLAYER DATABASE
 
@@ -7,15 +7,17 @@ Please choose one of these options:
 2. See all players
 3. Find player by name
 4. See highest-rated performance for player
-5. Exit.
+5. Delete player by name
+6. Delete player by ID
+7. Exit.
 
 Your selection: """
 
 def menu():
-    connection = Ruvby_database.connect()
-    Ruvby_database.create_tables(connection)
+    connection = Rugby_database.connect()
+    Rugby_database.create_tables(connection)
 
-    while (user_input := input(MENU_PROMPT)) != "5":
+    while (user_input := input(MENU_PROMPT)) != "7":
         if user_input == "1":
             prompt_add_new_player(connection)
         elif user_input == "2":
@@ -24,6 +26,10 @@ def menu():
             prompt_find_player(connection)
         elif user_input == "4":
             prompt_find_best_player(connection)
+        elif user_input == "5":
+            prompt_delete_player_by_name(connection)
+        elif user_input == "6":
+            prompt_delete_player_by_id(connection)
         else:
             print("Invalid input, please try again.")
 
@@ -31,28 +37,38 @@ def prompt_add_new_player(connection):
     name = input("Enter player name: ")
     position = input("Enter player position (e.g., Scrum-half, Wing): ")
     rating = int(input("Enter performance rating (1–100): "))
-    Ruvby_database.add_player(connection, name, position, rating)
+    Rugby_database.add_player(connection, name, position, rating)
 
 def prompt_see_all_players(connection):
-    players = Ruvby_database.get_all_players(connection)
+    players = Rugby_database.get_all_players(connection)
 
     for player in players:
         print(f"{player[1]} ({player[2]}) - {player[3]}/100")
 
 def prompt_find_player(connection):
     name = input("Enter player name to find: ")
-    players = Ruvby_database.get_players_by_name(connection, name)
+    players = Rugby_database.get_players_by_name(connection, name)
 
     for player in players:
         print(f"{player[1]} ({player[2]}) - {player[3]}/100")
 
 def prompt_find_best_player(connection):
     name = input("Enter player name: ")
-    best_player = Ruvby_database.get_best_player(connection, name)
+    best_player = Rugby_database.get_best_player(connection, name)
 
     if best_player:
         print(f"Best performance for {name}: {best_player[2]} position with rating {best_player[3]}/100")
     else:
         print("Player not found.")
+
+def prompt_delete_player_by_name(connection):
+    name = input("Enter player name to delete: ")
+    Rugby_database.delete_player_by_name(connection, name)
+    print(f"Player(s) named '{name}' deleted.")
+
+def prompt_delete_player_by_id(connection):
+    player_id = int(input("Enter player ID to delete: "))
+    Rugby_database.delete_player_by_id(connection, player_id)
+    print(f"Player with ID {player_id} deleted.")
 
 menu()
