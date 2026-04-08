@@ -19,7 +19,8 @@ WHERE name = ?
 ORDER BY rating DESC
 LIMIT 1;
 """
-
+DELETE_PLAYER_BY_NAME = "DELETE FROM players WHERE name = ?;"
+DELETE_PLATER_BY_ID = "DELETE FROM players WHERE id = ?;"
 def connect():
     return sqlite3.connect("rugby.db")
 
@@ -42,3 +43,11 @@ def get_players_by_name(connection, name):
 def get_best_player(connection, name):
     with connection:
         return connection.execute(GET_BEST_PLAYER, (name,)).fetchone()
+
+def delete_player_by_name(connection, name):
+    with connection:
+        connection.execute(DELETE_PLAYER_BY_NAME, (name,))
+
+def delete_player_by_id(connection, player_id):
+    with connection:
+        connection.execute(DELETE_PLAYER_BY_ID, (player_id,))
