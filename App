@@ -3,13 +3,13 @@ import Rugby_database
 MENU_PROMPT = """ RUGBY PLAYER DATABASE
 
 Please choose one of these options:
-1. Add new player
-2. See all players
-3. Find player by name
-4. See highest-rated performance for player
-5. Delete player by name
-6. Delete player by ID
-7. Exit.
+1- Add new player
+2- See all players
+3- Find player by name
+4- See highest-rated performance for player
+5- Delete player by name
+6- Delete player by ID
+7- Exit.
 
 Your selection: """
 
@@ -43,7 +43,7 @@ def prompt_see_all_players(connection):
     players = Rugby_database.get_all_players(connection)
 
     for player in players:
-        print(f"{player[1]} ({player[2]}) - {player[3]}/100")
+        print(f"ID: {player[0]} | {player[1]} ({player[2]}) - {player[3]}/100")
 
 def prompt_find_player(connection):
     name = input("Enter player name to find: ")
